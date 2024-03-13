@@ -25,7 +25,7 @@ if (empty($_POST['mobile'])) {
 
 $mobile = $db->escapeString($_POST['mobile']);
 if($mobile = '9090909090'){
-    $randomNumber = 000000;
+    $randomNumber = 123123;
 }
 else{
     $randomNumber = mt_rand(100000, 999999);
