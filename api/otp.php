@@ -24,7 +24,7 @@ if (empty($_POST['mobile'])) {
 }
 
 $mobile = $db->escapeString($_POST['mobile']);
-if($mobile = '9090909090'){
+if($mobile == '9090909090'){
     $randomNumber = 123123;
 }
 else{
