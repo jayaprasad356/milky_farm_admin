@@ -242,6 +242,12 @@ $fn = new custom_functions;
                         <span>OTP</span>
                     </a>
                 </li>
+                <li class="treeview">
+                    <a href="markets.php">
+                    <i class="fas fa-shopping-bag"></i>
+                        <span>Markets</span>
+                    </a>
+                </li>
             </section>
             <!-- /.sidebar -->
         </aside>

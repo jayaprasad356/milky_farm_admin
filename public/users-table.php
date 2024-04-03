@@ -35,7 +35,6 @@
                                     <th  data-field="state" data-sortable="true">State</th>
                                     <th data-field="refer_code" data-sortable="true">Refer Code</th>
                                     <th data-field="referred_by" data-sortable="true">Referred By</th>
-                     
                                     <th  data-field="balance" data-sortable="true">Balance</th>
                                     <th  data-field="total_income" data-sortable="true">Total Income</th>
                                     <th data-field="today_income" data-sortable="true">Today Income</th>
@@ -44,14 +43,16 @@
                                     <th  data-field="holder_name" data-sortable="true">Holder Name</th>
                                     <th  data-field="bank" data-sortable="true">Bank</th>
                                     <th data-field="branch" data-sortable="true">Branch</th>
-                                    <th  data-field="ifsc" data-sortable="true">IFSC</th>
-                                  
+                                    <th  data-field="ifsc" data-sortable="true">IFSC</th>                                 
                                     <th data-field="team_size" data-sortable="true">Team Size</th>
                                     <th data-field="valid_team" data-sortable="true">Valid Team</th>
                                     <th data-field="total_assets" data-sortable="true">Total Assets</th>
                                     <th  data-field="total_withdrawal" data-sortable="true">Total Withdrawals</th>
                                     <th  data-field="team_income" data-sortable="true">Team Income</th>
                                     <th data-field="registered_datetime" data-sortable="true">Registered Datetime</th>
+                                    <th  data-field="latitude" data-sortable="true">Latitude</th>
+                                    <th  data-field="longitude" data-sortable="true">Longitude</th>
+                                    <th data-field="profile">Profile</th>
                                 </tr>
                             </thead>
                         </table>

@@ -11,10 +11,12 @@ include_once('../includes/crud.php');
 
 $db = new Database();
 $db->connect();
+
+
 if (empty($_POST['user_id'])) {
     $response['success'] = false;
     $response['message'] = "User ID is Empty";
-    print_r(json_encode($response));
+    echo json_encode($response);
     return false;
 }
 
@@ -26,14 +28,16 @@ $res_user = $db->getResult();
 $num = $db->numRows($res_user);
 
 if ($num >= 1) {
-
+    
+    $user_details = $res_user[0];
+    $user_details['profile'] = DOMAIN_URL . $user_details['profile'];
     $response['success'] = true;
     $response['message'] = "User Details Retrieved Successfully";
-    $response['data'] = $res_user;
-    print_r(json_encode($response));
+    $response['data'] = array($user_details);
+    echo json_encode($response);
 } else {
     $response['success'] = false;
     $response['message'] = "User Not found";
-    print_r(json_encode($response));
+    echo json_encode($response);
 }
 ?>

@@ -127,6 +127,13 @@ $db->connect();
                 $tempRow['total_withdrawal'] = $row['total_withdrawal'];
                 $tempRow['team_income'] = $row['team_income'];
                 $tempRow['registered_datetime'] = $row['registered_datetime'];
+                $tempRow['latitude'] = $row['latitude'];
+                $tempRow['longitude'] = $row['longitude'];
+                if (!empty($row['profile'])) {
+                    $tempRow['profile'] = "<a data-lightbox='category' href='" . $row['profile'] . "' data-caption='" . $row['profile'] . "'><img src='" . $row['profile'] . "' title='" . $row['profile'] . "' height='50' /></a>";
+                } else {
+                    $tempRow['profile'] = 'No Image';
+                }
                 $tempRow['operate'] = $operate;
                 $rows[] = $tempRow;
             }
@@ -828,6 +835,60 @@ if (isset($_GET['table']) && $_GET['table'] == 'otp') {
         $tempRow['operate'] = $operate;
         $rows[] = $tempRow;
     }
+    $bulkData['rows'] = $rows;
+    print_r(json_encode($bulkData));
+}
+//markets table
+if (isset($_GET['table']) && $_GET['table'] == 'markets') {
+
+    $offset = 0;
+    $limit = 10;
+    $where = '';
+    $sort = 'id';
+    $order = 'DESC';
+
+    if (isset($_GET['offset']))
+        $offset = $db->escapeString($_GET['offset']);
+    if (isset($_GET['limit']))
+        $limit = $db->escapeString($_GET['limit']);
+    if (isset($_GET['sort']))
+        $sort = $db->escapeString($_GET['sort']);
+    if (isset($_GET['order']))
+        $order = $db->escapeString($_GET['order']);
+
+        if (isset($_GET['search']) && !empty($_GET['search'])) {
+            $search = $db->escapeString($_GET['search']);
+            $where .= " AND l.id LIKE '%" . $search . "%' OR l.name LIKE '%" . $search . "%' OR p.products LIKE '%" . $search . "%'";
+        }  
+        $join = "LEFT JOIN `plan` p ON l.plan_id = p.id WHERE l.id IS NOT NULL " . $where;
+
+        $sql = "SELECT COUNT(l.id) AS total FROM `markets` l " . $join ;
+        $db->sql($sql);
+        $res = $db->getResult();
+        foreach ($res as $row) {
+            $total = $row['total'];
+        }
+    
+        $sql = "SELECT l.id AS id, l.*, p.products FROM `markets` l " . $join  . $where . " ORDER BY $sort $order LIMIT $offset, $limit";
+        $db->sql($sql);
+        $res = $db->getResult();
+
+    $bulkData = array();
+    $bulkData['total'] = $total;
+    $rows = array();
+    $tempRow = array();
+    foreach ($res as $row) {
+
+      
+        $operate = '<a href="edit-markets.php?id=' . $row['id'] . '"><i class="fa fa-edit"></i>Edit</a>';
+        $operate .= ' <a class="text text-danger" href="delete-markets.php?id=' . $row['id'] . '"><i class="fa fa-trash"></i>Delete</a>';
+       $tempRow['id'] = $row['id'];
+       $tempRow['products'] = $row['products'];
+       $tempRow['name'] = $row['name'];
+       $tempRow['price'] = $row['price'];
+    $tempRow['operate'] = $operate;
+    $rows[] = $tempRow;
+}
     $bulkData['rows'] = $rows;
     print_r(json_encode($bulkData));
 }
