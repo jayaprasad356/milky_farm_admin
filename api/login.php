@@ -26,29 +26,34 @@ if (empty($_POST['device_id'])) {
     print_r(json_encode($response));
     return false;
 }
-if (empty($_POST['otp'])) {
+// if (empty($_POST['otp'])) {
+//     $response['success'] = false;
+//     $response['message'] = "Otp is Empty";
+//     print_r(json_encode($response));
+//     return false;
+// }
+if (empty($_POST['password'])) {
     $response['success'] = false;
-    $response['message'] = "Otp is Empty";
+    $response['message'] = "Password is empty";
     print_r(json_encode($response));
     return false;
 }
-
 $device_id = $db->escapeString($_POST['device_id']);
 $mobile = $db->escapeString($_POST['mobile']);
-$otp = $db->escapeString($_POST['otp']);
+//$otp = $db->escapeString($_POST['otp']);
+$password = $db->escapeString($_POST['password']);
 
 
+// $sql = "SELECT * FROM otp WHERE mobile = '$mobile' AND otp = '$otp'";
+// $db->sql($sql);
+// $user = $db->getResult();
 
-$sql = "SELECT * FROM otp WHERE mobile = '$mobile' AND otp = '$otp'";
-$db->sql($sql);
-$user = $db->getResult();
-
-if (empty($user)) {
-    $response['success'] = false;
-    $response['message'] = "Invalid Otp";
-    print_r(json_encode($response));
-    return false;
-}
+// if (empty($user)) {
+//     $response['success'] = false;
+//     $response['message'] = "Invalid Otp";
+//     print_r(json_encode($response));
+//     return false;
+// }
 
 $sql = "SELECT * FROM users WHERE mobile = '$mobile'";
 $db->sql($sql);
@@ -60,7 +65,23 @@ if (empty($user)) {
     print_r(json_encode($response));
     return false;
 }
+$sql = "SELECT * FROM users WHERE mobile = '$mobile' AND password = '$password'";
+$db->sql($sql);
+$user = $db->getResult();
+if (empty($user)) {
+    $response['success'] = false;
+    $response['message'] = "Your Password is incorrect";
+    print_r(json_encode($response));
+    return false;
+}
+$blocked = $user[0]['blocked'];
 
+if ($blocked == 1) {
+    $response['success'] = false;
+    $response['message'] = "Your Account is Blocked";
+    print_r(json_encode($response));
+    return false;
+}
 $sql_query = "UPDATE users SET device_id = '$device_id' WHERE mobile ='$mobile' AND device_id = ''";
 $db->sql($sql_query);
 
