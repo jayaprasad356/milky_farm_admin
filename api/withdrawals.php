@@ -64,6 +64,14 @@ if (!isBetween10AMand6PM()) {
     print_r(json_encode($response));
     return false;
 }
+$dayOfWeek = date('w');
+
+if ($dayOfWeek == 0 || $dayOfWeek == 7) {
+    $response['success'] = false;
+    $response['message'] = "Withdrawal time Monday to Saturday";
+    print_r(json_encode($response));
+    return false;
+} 
 if ($amount >= $min_withdrawal) {
     if ($amount <= $balance) {
         if ($account_num == '') {
