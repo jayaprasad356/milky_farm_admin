@@ -32,8 +32,8 @@ if ($num >= 1){
         $temp['pay_gateway'] = $row['pay_gateway'];
 
         $rows[] = $temp;
-    }
     $response['success'] = true;
+    }
     $response['message'] = "Settings Listed Successfully";
     $response['data'] = $rows;
     print_r(json_encode($response));
