@@ -61,6 +61,15 @@ $db->connect();
                 $referred_by = $db->escapeString($fn->xss_clean($_GET['referred_by']));
                 $where .= "AND referred_by = '$referred_by' "; // Properly append the condition
             }
+
+            if (isset($_GET['profile']) && $_GET['profile'] != '') {
+                $profile = $db->escapeString($fn->xss_clean($_GET['profile']));
+                if ($profile == 'text') {
+                    $where .= "AND profile <> '' "; 
+                } else if ($profile == 'NULL') {
+                    $where .= "AND (profile = '' OR profile IS NULL) "; 
+                }
+            }
             if (isset($_GET['offset']))
                 $offset = $db->escapeString($_GET['offset']);
             if (isset($_GET['limit']))

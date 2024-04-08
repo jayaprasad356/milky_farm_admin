@@ -15,6 +15,14 @@
                         <h4 class="box-title">Referred By</h4>
                             <input type="text" class="form-control" name="referred_by" id="referred_by" >
                         </div>
+                        <div class="col-md-3">
+                        <h4 class="box-title">Filter by Profile</h4>
+                        <select id="profile" name="profile" class="form-control">
+                            <option value="">All</option>
+                            <option value="text">Yes</option>
+                            <option value="NULL">No</option>
+                        </select>
+                    </div>
                         </div>
                     <div  class="box-body table-responsive">
                     <table id='users_table' class="table table-hover" data-toggle="table" data-url="api-firebase/get-bootstrap-table-data.php?table=users" data-page-list="[5, 10, 20, 50, 100, 200]" data-show-refresh="true" data-show-columns="true" data-side-pagination="server" data-pagination="true" data-search="true" data-trim-on-search="false" data-filter-control="true" data-query-params="queryParams" data-sort-name="id" data-sort-order="desc" data-show-export="true" data-export-types='["txt","csv"]' data-export-options='{
@@ -86,6 +94,9 @@
     $('#plan').on('change', function() {
         $('#users_table').bootstrapTable('refresh');
     });
+    $('#profile').on('change', function() {
+        $('#users_table').bootstrapTable('refresh');
+    });
     function queryParams(p) {
         return {
             "date": $('#date').val(),
@@ -95,6 +106,7 @@
             "trail_completed": $('#trail_completed').val(),
             "referred_by": $('#referred_by').val(),
             "plan": $('#plan').val(),
+            "profile": $('#profile').val(),
             limit: p.limit,
             sort: p.sort,
             order: p.order,
