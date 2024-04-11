@@ -30,10 +30,11 @@ if ($num >= 1){
         $temp['pay_video'] = $row['pay_video'];
         $temp['offer_image'] = $row['offer_image'];
         $temp['pay_gateway'] = $row['pay_gateway'];
+        $temp['scratch_card'] = $row['scratch_card'];
 
         $rows[] = $temp;
-    }
     $response['success'] = true;
+    }
     $response['message'] = "Settings Listed Successfully";
     $response['data'] = $rows;
     print_r(json_encode($response));

@@ -38,6 +38,16 @@ if (empty($user)) {
     return false;
 }
 
+$earned_user = 0;
+
+$sql = "SELECT * FROM `user_plan` WHERE income > 300 AND plan_id = 2 AND user_id = $user_id";
+$db->sql($sql);
+$res= $db->getResult();
+$num = $db->numRows($res);
+if ($num >= 1){
+    $earned_user = 1;
+
+}
 
 $sql = "SELECT * FROM markets WHERE plan_id = '$plan_id'";
 $db->sql($sql);
@@ -45,10 +55,23 @@ $res= $db->getResult();
 $num = $db->numRows($res);
 
 if ($num >= 1){
- 
+    foreach ($res as $row) {
+        $temp['id'] = $row['id'];
+        $temp['plan_id'] = $row['plan_id'];
+        $temp['name'] = $row['name'];
+        $temp['price'] = $row['price'];
+        $temp['min_valid_team'] = $row['min_valid_team'];
+        // if($earned_user == 1 && $row['id'] == 2){
+        //     $temp['price'] = '8';
+
+        // }
+        
+
+        $rows[] = $temp;
+    }
     $response['success'] = true;
     $response['message'] = "Markets Listed Successfully";
-    $response['data'] = $res;
+    $response['data'] = $rows;
     print_r(json_encode($response));
 }
 else{

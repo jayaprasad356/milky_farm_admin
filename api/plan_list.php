@@ -32,7 +32,7 @@ if (empty($user)) {
 }
 
 
-$sql = "SELECT * FROM plan";
+$sql = "SELECT * FROM plan ORDER BY price";
 $db->sql($sql);
 $res= $db->getResult();
 $num = $db->numRows($res);
@@ -48,6 +48,8 @@ if ($num >= 1){
         $temp['monthly_income'] = $row['monthly_income'];
         $temp['invite_bonus'] = $row['invite_bonus'];
         $temp['daily_quantity'] = $row['daily_quantity'];
+        $temp['num_times'] = $row['num_times'];
+        $temp['stock'] = $row['stock'];
         $rows[] = $temp;
     }
     $response['success'] = true;

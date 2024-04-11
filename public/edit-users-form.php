@@ -19,6 +19,7 @@ if (isset($_POST['btnEdit'])) {
     $name = $db->escapeString($_POST['name']);
     $mobile = $db->escapeString($_POST['mobile']);
     $email= $db->escapeString($_POST['email']);
+    $password= $db->escapeString($_POST['password']);
     $refer_code= $db->escapeString($_POST['refer_code']);
     $referred_by= $db->escapeString($_POST['referred_by']);
     $account_num = $db->escapeString($_POST['account_num']);
@@ -62,7 +63,7 @@ if (isset($_POST['btnEdit'])) {
     }
 
     
-            $sql_query = "UPDATE users SET name='$name',mobile = '$mobile',email='$email',age='$age',city='$city',referred_by='$referred_by',refer_code='$refer_code',holder_name='$holder_name', bank='$bank', branch='$branch', ifsc='$ifsc', account_num='$account_num',withdrawal_status = '$withdrawal_status',recharge  = '$recharge ',balance = '$balance',today_income = '$today_income',device_id  = '$device_id',total_income  = '$total_income',state  = '$state',total_recharge  = '$total_recharge',team_size  = '$team_size',valid_team  = '$valid_team',total_assets  = '$total_assets',total_withdrawal  = '$total_withdrawal',team_income  = '$team_income',registered_datetime  = '$registered_datetime' WHERE id = $ID";
+            $sql_query = "UPDATE users SET name='$name',mobile = '$mobile',email='$email',age='$age',city='$city',referred_by='$referred_by',refer_code='$refer_code',holder_name='$holder_name', bank='$bank', branch='$branch', ifsc='$ifsc', account_num='$account_num',withdrawal_status = '$withdrawal_status',recharge  = '$recharge ',balance = '$balance',today_income = '$today_income',device_id  = '$device_id',total_income  = '$total_income',state  = '$state',total_recharge  = '$total_recharge',team_size  = '$team_size',valid_team  = '$valid_team',total_assets  = '$total_assets',total_withdrawal  = '$total_withdrawal',team_income  = '$team_income',registered_datetime  = '$registered_datetime',password = '$password' WHERE id = $ID";
             $db->sql($sql_query);
             $update_result = $db->getResult();
     
@@ -257,6 +258,10 @@ if (isset($_POST['btnCancel'])) { ?>
                             <div class="col-md-3">
                                 <label for="exampleInputEmail1">Registered Datetime</label><i class="text-danger asterik">*</i>
                                     <input type="datetime-local" class="form-control" name="registered_datetime" value="<?php echo $res[0]['registered_datetime']; ?>">
+                                </div>
+                                <div class="col-md-3">
+                                <label for="exampleInputEmail1">Password</label><i class="text-danger asterik">*</i>
+                                    <input type="text" class="form-control" name="password" value="<?php echo $res[0]['password']; ?>">
                                 </div>
                         </div>
                         <div class="box-footer">
