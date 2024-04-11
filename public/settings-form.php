@@ -13,10 +13,11 @@ if (isset($_POST['btnUpdate'])) {
     $max_withdrawal = $db->escapeString(($_POST['max_withdrawal']));
     $pay_video = $db->escapeString(($_POST['pay_video']));
     $pay_gateway = $db->escapeString(($_POST['pay_gateway']));
+    $scratch_card = $db->escapeString(($_POST['scratch_card']));
     
 
             $error = array();
-            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway' WHERE id=1";
+            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card' WHERE id=1";
             $db->sql($sql_query);
             $result = $db->getResult();
             if (!empty($result)) {
@@ -101,6 +102,13 @@ $res = $db->getResult();
                                         <input type="hidden" id="pay_gateway" name="pay_gateway" value="<?= isset($res[0]['pay_gateway']) && $res[0]['pay_gateway'] == 1 ? 1 : 0 ?>">
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="">Scratch Card</label><br>
+                                        <input type="checkbox" id="scratch_card_button" class="js-switch" <?= isset($res[0]['scratch_card']) && $res[0]['scratch_card'] == 1 ? 'checked' : '' ?>>
+                                        <input type="hidden" id="scratch_card" name="scratch_card" value="<?= isset($res[0]['scratch_card']) && $res[0]['scratch_card'] == 1 ? 1 : 0 ?>">
+                                    </div>
+                                </div>
 								
                             </div>
                            <br>
@@ -145,6 +153,19 @@ $res = $db->getResult();
 
         } else {
             $('#pay_gateway').val(0);
+        }
+    };
+</script>
+
+<script>
+    var changeCheckbox = document.querySelector('#scratch_card_button');
+    var init = new Switchery(changeCheckbox);
+    changeCheckbox.onchange = function() {
+        if ($(this).is(':checked')) {
+            $('#scratch_card').val(1);
+
+        } else {
+            $('#scratch_card').val(0);
         }
     };
 </script>
