@@ -21,11 +21,27 @@ if (empty($_POST['user_id'])) {
 
 $user_id = $db->escapeString($_POST['user_id']);
 
+$sql = "SELECT valid FROM users WHERE id = $user_id ";
+$db->sql($sql);
+$user = $db->getResult();
 
-$sql = "SELECT user_plan.* ,plan.image,plan.products,plan.invite_bonus,plan.price,plan.daily_quantity,plan.unit,plan.daily_income
+if (empty($user)) {
+    $response['success'] = false;
+    $response['message'] = "User not found";
+    print_r(json_encode($response));
+    return false;
+}
+$valid = $user[0]['valid'];
+$join = "";
+if($valid == 1){
+    $join = "AND user_plan.plan_id != 1";
+
+}
+
+$sql = "SELECT user_plan.* ,plan.image,plan.products,plan.invite_bonus,plan.price,plan.daily_quantity,plan.unit,plan.daily_income,plan.num_times,plan.stock
         FROM user_plan 
         LEFT JOIN plan ON user_plan.plan_id = plan.id
-        WHERE user_plan.user_id = '$user_id'";
+        WHERE user_plan.user_id = '$user_id' ".$join;
 
 $db->sql($sql);
 $res = $db->getResult();

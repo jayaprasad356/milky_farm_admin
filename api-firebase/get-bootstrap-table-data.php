@@ -205,19 +205,23 @@ $db->connect();
                 $tempRow['daily_quantity'] = $row['daily_quantity'];
                 $tempRow['monthly_income'] = $row['monthly_income'];
                 $tempRow['invite_bonus'] = $row['invite_bonus'];
+                $tempRow['num_times'] = $row['num_times'];
                 $tempRow['unit'] = $row['unit'];
                 if (!empty($row['image'])) {
                     $tempRow['image'] = "<a data-lightbox='category' href='" . $row['image'] . "' data-caption='" . $row['image'] . "'><img src='" . $row['image'] . "' title='" . $row['image'] . "' height='50' /></a>";
                 } else {
                     $tempRow['image'] = 'No Image';
                 }
+                if($row['stock']==1)
+                $tempRow['stock'] ="<p class='text text-success'>Enabled</p>";
+                else
+              $tempRow['stock']="<p class='text text-danger'>Disabled</p>";
                 $tempRow['operate'] = $operate;
                 $rows[] = $tempRow;
             }
             $bulkData['rows'] = $rows;
             print_r(json_encode($bulkData));
         }
-
         //withdrawals table goes here
 if (isset($_GET['table']) && $_GET['table'] == 'withdrawals') {
     $offset = 0;
