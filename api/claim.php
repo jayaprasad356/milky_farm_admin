@@ -34,6 +34,21 @@ if (empty($_POST['plan_id'])) {
 $user_id = $db->escapeString($_POST['user_id']);
 $plan_id = $db->escapeString($_POST['plan_id']);
 
+
+$sql = "SELECT * FROM settings WHERE id=1";
+$db->sql($sql);
+$result = $db->getResult();
+$income_status = $result[0]['income_status'];
+
+
+if ($income_status == 0) {
+    $response['success'] = false;
+    $response['message'] = "Daily Income is Disabled";
+    print_r(json_encode($response));
+    return false;
+}
+
+
 $sql = "SELECT id,referred_by,c_referred_by,d_referred_by FROM users WHERE id = $user_id";
 $db->sql($sql);
 $user = $db->getResult();

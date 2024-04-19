@@ -14,10 +14,12 @@ if (isset($_POST['btnUpdate'])) {
     $pay_video = $db->escapeString(($_POST['pay_video']));
     $pay_gateway = $db->escapeString(($_POST['pay_gateway']));
     $scratch_card = $db->escapeString(($_POST['scratch_card']));
+    $withdrawal_status = $db->escapeString(($_POST['withdrawal_status']));
+    $income_status = $db->escapeString(($_POST['income_status']));
     
 
             $error = array();
-            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card' WHERE id=1";
+            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card',withdrawal_status = '$withdrawal_status',income_status = '$income_status' WHERE id=1";
             $db->sql($sql_query);
             $result = $db->getResult();
             if (!empty($result)) {
@@ -64,7 +66,7 @@ $res = $db->getResult();
                 <!-- form start -->
                 <form name="delivery_charge" method="post" enctype="multipart/form-data">
                     <div class="box-body">
-                            <div class="row">
+                        <div class="row">
                             <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="">Whatsapp Group</label><br>
@@ -95,25 +97,37 @@ $res = $db->getResult();
                                         <input type="text" class="form-control" name="pay_video" value="<?= $res[0]['pay_video'] ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="">Payment Gateway</label><br>
                                         <input type="checkbox" id="payment_button" class="js-switch" <?= isset($res[0]['pay_gateway']) && $res[0]['pay_gateway'] == 1 ? 'checked' : '' ?>>
                                         <input type="hidden" id="pay_gateway" name="pay_gateway" value="<?= isset($res[0]['pay_gateway']) && $res[0]['pay_gateway'] == 1 ? 1 : 0 ?>">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="">Scratch Card</label><br>
                                         <input type="checkbox" id="scratch_card_button" class="js-switch" <?= isset($res[0]['scratch_card']) && $res[0]['scratch_card'] == 1 ? 'checked' : '' ?>>
                                         <input type="hidden" id="scratch_card" name="scratch_card" value="<?= isset($res[0]['scratch_card']) && $res[0]['scratch_card'] == 1 ? 1 : 0 ?>">
                                     </div>
                                 </div>
-								
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="">Withdrawal Status</label><br>
+                                        <input type="checkbox" id="withdrawal_status_button" class="js-switch" <?= isset($res[0]['withdrawal_status']) && $res[0]['withdrawal_status'] == 1 ? 'checked' : '' ?>>
+                                        <input type="hidden" id="withdrawal_status" name="withdrawal_status" value="<?= isset($res[0]['withdrawal_status']) && $res[0]['withdrawal_status'] == 1 ? 1 : 0 ?>">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="">Income Status</label><br>
+                                        <input type="checkbox" id="income_status_button" class="js-switch" <?= isset($res[0]['income_status']) && $res[0]['income_status'] == 1 ? 'checked' : '' ?>>
+                                        <input type="hidden" id="income_status" name="income_status" value="<?= isset($res[0]['income_status']) && $res[0]['income_status'] == 1 ? 1 : 0 ?>">
+                                    </div>
+                                </div>
                             </div>
-                           <br>
-                    </div>
-                  
+                        </div>
+                        <br>
                     <!-- /.box-body -->
 
                     <div class="box-footer">
@@ -156,7 +170,30 @@ $res = $db->getResult();
         }
     };
 </script>
+<script>
+    var changeCheckbox = document.querySelector('#withdrawal_status_button');
+    var init = new Switchery(changeCheckbox);
+    changeCheckbox.onchange = function() {
+        if ($(this).is(':checked')) {
+            $('#withdrawal_status').val(1);
 
+        } else {
+            $('#withdrawal_status').val(0);
+        }
+    };
+</script>
+<script>
+    var changeCheckbox = document.querySelector('#income_status_button');
+    var init = new Switchery(changeCheckbox);
+    changeCheckbox.onchange = function() {
+        if ($(this).is(':checked')) {
+            $('#income_status').val(1);
+
+        } else {
+            $('#income_status').val(0);
+        }
+    };
+</script>
 <script>
     var changeCheckbox = document.querySelector('#scratch_card_button');
     var init = new Switchery(changeCheckbox);
