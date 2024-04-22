@@ -16,10 +16,11 @@ if (isset($_POST['btnUpdate'])) {
     $scratch_card = $db->escapeString(($_POST['scratch_card']));
     $withdrawal_status = $db->escapeString(($_POST['withdrawal_status']));
     $income_status = $db->escapeString(($_POST['income_status']));
+    $description = $db->escapeString(($_POST['description']));
     
 
             $error = array();
-            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card',withdrawal_status = '$withdrawal_status',income_status = '$income_status' WHERE id=1";
+            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card',withdrawal_status = '$withdrawal_status',income_status = '$income_status', description = '$description' WHERE id=1";
             $db->sql($sql_query);
             $result = $db->getResult();
             if (!empty($result)) {
@@ -125,6 +126,17 @@ $res = $db->getResult();
                                         <input type="hidden" id="income_status" name="income_status" value="<?= isset($res[0]['income_status']) && $res[0]['income_status'] == 1 ? 1 : 0 ?>">
                                     </div>
                                 </div>
+                                <br>
+                                <div class="col-md-12">
+                                <div class="form-group">
+                                   <label for="description">Description :</label> <i class="text-danger asterik">*</i><?php echo isset($error['description']) ? $error['description'] : ''; ?>
+                                    <textarea name="description" id="description" class="form-control" rows="8"><?php echo $res[0]['description']; ?></textarea>
+                                    <script type="text/javascript" src="css/js/ckeditor/ckeditor.js"></script>
+                                    <script type="text/javascript">
+                                       CKEDITOR.replace('description');
+                                    </script>
+                                 </div>
+                                </div> 
                             </div>
                         </div>
                         <br>
