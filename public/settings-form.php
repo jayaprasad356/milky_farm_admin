@@ -16,11 +16,11 @@ if (isset($_POST['btnUpdate'])) {
     $scratch_card = $db->escapeString(($_POST['scratch_card']));
     $withdrawal_status = $db->escapeString(($_POST['withdrawal_status']));
     $income_status = $db->escapeString(($_POST['income_status']));
-    $description = $db->escapeString(($_POST['description']));
+    $withdrawal_ins = $db->escapeString(($_POST['withdrawal_ins']));
     
 
             $error = array();
-            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card',withdrawal_status = '$withdrawal_status',income_status = '$income_status', description = '$description' WHERE id=1";
+            $sql_query = "UPDATE settings SET whatsapp_group='$whatsapp_group',telegram_channel='$telegram_channel',min_withdrawal='$min_withdrawal',max_withdrawal='$max_withdrawal',pay_video='$pay_video',pay_gateway='$pay_gateway',scratch_card = '$scratch_card',withdrawal_status = '$withdrawal_status',income_status = '$income_status', withdrawal_ins = '$withdrawal_ins' WHERE id=1";
             $db->sql($sql_query);
             $result = $db->getResult();
             if (!empty($result)) {
@@ -129,11 +129,11 @@ $res = $db->getResult();
                                 <br>
                                 <div class="col-md-12">
                                 <div class="form-group">
-                                   <label for="description">Description :</label> <i class="text-danger asterik">*</i><?php echo isset($error['description']) ? $error['description'] : ''; ?>
-                                    <textarea name="description" id="description" class="form-control" rows="8"><?php echo $res[0]['description']; ?></textarea>
+                                   <label for="withdrawal_ins">Withdrawal Ins :</label> <i class="text-danger asterik">*</i><?php echo isset($error['withdrawal_ins']) ? $error['withdrawal_ins'] : ''; ?>
+                                    <textarea name="withdrawal_ins" id="withdrawal_ins" class="form-control" rows="8"><?php echo $res[0]['withdrawal_ins']; ?></textarea>
                                     <script type="text/javascript" src="css/js/ckeditor/ckeditor.js"></script>
                                     <script type="text/javascript">
-                                       CKEDITOR.replace('description');
+                                       CKEDITOR.replace('withdrawal_ins');
                                     </script>
                                  </div>
                                 </div> 
