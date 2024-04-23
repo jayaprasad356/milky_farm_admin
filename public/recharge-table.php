@@ -1,31 +1,32 @@
-
 <?php
-if (isset($_POST['btnPaid'])  && isset($_POST['enable'])) {
-    for ($i = 0; $i < count($_POST['enable']); $i++) {
-        
-        $enable = $db->escapeString($fn->xss_clean($_POST['enable'][$i]));
-        $recharge = 299;
+if (isset($_POST['btnPaid']) && isset($_POST['enable']) && isset($_POST['price'])) {
+    $price = $db->escapeString($fn->xss_clean($_POST['price']));
+    
+    foreach ($_POST['enable'] as $enable) {
+        $enable = $db->escapeString($fn->xss_clean($enable));
+
         $sql = "SELECT user_id FROM recharge WHERE id = $enable";
         $db->sql($sql);
-        $res= $db->getResult();
+        $res = $db->getResult();
         $user_id = $res[0]['user_id'];
+
         $sql = "SELECT id FROM users WHERE id = $user_id";
         $db->sql($sql);
-        $res= $db->getResult();
+        $res = $db->getResult();
         $num = $db->numRows($res);
+
         if ($num == 1) {
-            $sql = "UPDATE recharge SET recharge_amount = $recharge,status=1 WHERE id = $enable";
+            $sql = "UPDATE recharge SET recharge_amount = $price, status = 1 WHERE id = $enable";
             $db->sql($sql);
+
             $datetime = date('Y-m-d H:i:s');
             $type = 'recharge';
-            $sql = "INSERT INTO transactions (`user_id`,`amount`,`datetime`,`type`)VALUES('$user_id','$recharge','$datetime','$type')";
+            $sql = "INSERT INTO transactions (`user_id`, `amount`, `datetime`, `type`) VALUES ('$user_id', '$price', '$datetime', '$type')";
             $db->sql($sql);
-            $sql_query = "UPDATE users SET recharge = recharge + $recharge ,total_recharge = total_recharge + $recharge  WHERE id = $user_id";
+
+            $sql_query = "UPDATE users SET recharge = recharge + $price, total_recharge = total_recharge + $price WHERE id = $user_id";
             $db->sql($sql_query);
-
         }
-
-
     }
 }
 if (isset($_POST['btnCancel'])  && isset($_POST['enable'])) {
@@ -63,13 +64,47 @@ if (isset($_POST['btnCancel'])  && isset($_POST['enable'])) {
                         <h4 class="box-title">Filter by Date </h4>
                         <input type="date" class="form-control" id="date" name="date" value="<?php echo (isset($_GET['date'])) ? $_GET['date'] : "" ?>">
                     </div>
+                    
+                    <div class="col-md-3">
+                        <h4 class="box-title">Filter by Time</h4>
+                        <select class="form-control" id="hour" name="hour">
+                            <option value="">Select Hour</option>
+                            <?php
+                            // Loop through hours in 24-hour format
+                            for ($i = 0; $i < 24; $i++) {
+                                // Format hour with leading zero if needed
+                                $hour = sprintf("%02d", $i);
+                                echo "<option value='$hour'>$hour</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                       <h4 class="box-title">Select or Enter Price</h4>
+                            <select id="price_select" class="form-control">
+                                <option value="">Select</option>
+                                <?php
+                                $sql = "SELECT price FROM `plan` WHERE price > 0 GROUP BY price ORDER BY id";
+                                $db->sql($sql);
+                                $result = $db->getResult();
+                                foreach ($result as $value) {
+                                    ?>
+                                    <option value="<?= $value['price'] ?>"><?= $value['price'] ?></option>
+                                    <?php
+                                }
+                                ?>
+                                <option value="custom">Enter Price</option>
+                            </select>
+                     <input type="number" id="custom_price_input" class="form-control" placeholder="Enter price" style="display: none;">
+                       <input type="hidden" id="price" name="price">
+                        </div>
                     <div class="col-md-2">
                         <input type="checkbox" onchange="checkAll(this)" name="chk[]" > Select All</input>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <button type="submit" class="btn btn-success" name="btnPaid">verifed</button>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <button type="submit" class="btn btn-danger" name="btnCancel">Cancel</button>
                     </div>
                 </div>
@@ -98,13 +133,15 @@ if (isset($_POST['btnCancel'])  && isset($_POST['enable'])) {
     </div>
     </form>
 </section>
-
 <script>
     $('#status').on('change', function() {
         $('#users_table').bootstrapTable('refresh');
     });
 
     $('#date').on('change', function() {
+        $('#users_table').bootstrapTable('refresh');
+    });
+    $('#hour').on('change', function() {
         $('#users_table').bootstrapTable('refresh');
     });
 
@@ -115,6 +152,7 @@ if (isset($_POST['btnCancel'])  && isset($_POST['enable'])) {
             "community": $('#community').val(),
             "status": $('#status').val(),
             "date": $('#date').val(),
+            "hour": $('#hour').val(),
             limit: p.limit,
             sort: p.sort,
             order: p.order,
@@ -143,4 +181,24 @@ if (isset($_POST['btnCancel'])  && isset($_POST['enable'])) {
      }
  }
     
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("price_select").addEventListener("change", function() {
+        if (this.value === "custom") {
+            document.getElementById("custom_price_input").style.display = "block";
+            document.getElementById("custom_price_input").setAttribute("name", "custom_price"); // change the name attribute for custom price
+            document.getElementById("price").value = ""; // clear the hidden input value
+        } else {
+            document.getElementById("custom_price_input").style.display = "none";
+            document.getElementById("custom_price_input").removeAttribute("name"); // remove the name attribute for custom price
+            document.getElementById("price").value = this.value; // set the hidden input value to selected price
+        }
+    });
+    
+    // Listen for changes in the custom price input
+    document.getElementById("custom_price_input").addEventListener("input", function() {
+        document.getElementById("price").value = this.value; // update the hidden input value
+    });
+});
 </script>

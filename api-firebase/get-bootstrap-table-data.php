@@ -482,6 +482,11 @@ if (isset($_GET['table']) && $_GET['table'] == 'recharge') {
         $where .= " AND DATE(l.datetime) = '$formatted_date'";
     }
 
+    
+    if (isset($_GET['hour']) && $_GET['hour'] != '') {
+        $selected_hour = $db->escapeString($fn->xss_clean($_GET['hour']));
+        $where .= " AND HOUR(l.datetime) = '$selected_hour'";
+    }
     if (isset($_GET['offset']))
         $offset = $db->escapeString($fn->xss_clean($_GET['offset']));
     if (isset($_GET['limit']))
