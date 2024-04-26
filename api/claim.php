@@ -72,7 +72,7 @@ if ($dayOfWeek == 0 || $dayOfWeek == 7) {
 $referred_by = $user[0]['referred_by'];
 $c_referred_by = $user[0]['c_referred_by'];
 $d_referred_by = $user[0]['d_referred_by'];
-$sql = "SELECT * FROM user_plan WHERE user_id = $user_id AND plan_id = $plan_id";
+$sql = "SELECT * FROM user_plan WHERE user_id = $user_id AND plan_id = $plan_id ORDER BY claim DESC LIMIT 1";
 $db->sql($sql);
 $user_plan = $db->getResult();
 if (empty($user_plan)) {
@@ -82,7 +82,7 @@ if (empty($user_plan)) {
     return;
 }
 $claim = $user_plan[0]['claim'];
-
+$user_plan_id = $user_plan[0]['id'];
 if ($claim == 0) {
     $response['success'] = false;
     $response['message'] = "You already claimed this plan";
@@ -103,7 +103,7 @@ if (empty($plan)) {
 $daily_income = $plan[0]['daily_income'];
 
 
-$sql = "UPDATE user_plan SET claim = 0,income = income + $daily_income WHERE plan_id = $plan_id AND user_id = $user_id";
+$sql = "UPDATE user_plan SET claim = 0,income = income + $daily_income WHERE id = $user_plan_id";
 $db->sql($sql);
 
 $sql = "UPDATE users SET balance = balance + $daily_income, today_income = today_income + $daily_income, total_income = total_income + $daily_income WHERE id = $user_id";
