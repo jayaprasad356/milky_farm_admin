@@ -49,7 +49,7 @@ if ($income_status == 0) {
 }
 
 
-$sql = "SELECT id,referred_by,c_referred_by,d_referred_by FROM users WHERE id = $user_id";
+$sql = "SELECT id,referred_by,c_referred_by,d_referred_by,valid FROM users WHERE id = $user_id";
 $db->sql($sql);
 $user = $db->getResult();
 
@@ -72,6 +72,7 @@ if ($dayOfWeek == 0 || $dayOfWeek == 7) {
 $referred_by = $user[0]['referred_by'];
 $c_referred_by = $user[0]['c_referred_by'];
 $d_referred_by = $user[0]['d_referred_by'];
+$valid = $user[0]['valid'];
 $sql = "SELECT * FROM user_plan WHERE user_id = $user_id AND plan_id = $plan_id ORDER BY claim DESC LIMIT 1";
 $db->sql($sql);
 $user_plan = $db->getResult();
@@ -99,6 +100,14 @@ if (empty($plan)) {
     $response['message'] = "Plan not found";
     echo json_encode($response);
     return;
+}
+
+if($valid == 0){
+    $response['success'] = false;
+    $response['message'] = "Purchase 299 Milk Plan";
+    echo json_encode($response);
+    return;
+
 }
 $daily_income = $plan[0]['daily_income'];
 
