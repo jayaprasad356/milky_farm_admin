@@ -63,7 +63,7 @@ $db->sql($sql);
 $res = $db->getResult();
 $balance = $res[0]['balance'];
 $account_num = $res[0]['account_num'];
-
+$referred_by = $res[0]['referred_by'];
 
 
 
@@ -92,6 +92,17 @@ if ($num == 0) {
     echo json_encode($response);
     return;
 
+}
+
+$sql = "SELECT * FROM `users`u,user_plan up WHERE u.id = up.user_id AND u.referred_by = '$referred_by' AND up.plan_id = 7";
+$db->sql($sql);
+$res= $db->getResult();
+$num = $db->numRows($res);
+if ($num <  1) {
+    $response['success'] = false;
+    $response['message'] = "Invite 1 member in Rental Cow";
+    echo json_encode($response);
+    return;
 }
 if ($amount >= $min_withdrawal) {
     if ($amount <= $balance) {
