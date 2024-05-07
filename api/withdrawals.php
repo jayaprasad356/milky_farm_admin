@@ -98,9 +98,9 @@ $sql = "SELECT * FROM `users`u,user_plan up WHERE u.id = up.user_id AND u.referr
 $db->sql($sql);
 $res= $db->getResult();
 $num = $db->numRows($res);
-if ($num <  1) {
+if ($num <  2) {
     $response['success'] = false;
-    $response['message'] = "Invite 1 member in Rental Cow";
+    $response['message'] = "Invite 2 members in Rental Cow";
     echo json_encode($response);
     return;
 }
