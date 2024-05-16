@@ -79,6 +79,20 @@ $password = $db->escapeString($_POST['password']);
 $c_referred_by = '';
 $d_referred_by = '';
 $datetime = date('Y-m-d H:i:s');
+
+if (!empty($_POST['referred_by'])) {
+    $referred_by = $db->escapeString($_POST['referred_by']);
+    $sql = "SELECT id FROM users WHERE refer_code='$referred_by'";
+    $db->sql($sql);
+    $res = $db->getResult();
+    $num = $db->numRows($res);
+    if ($num == 0) {
+        $response['success'] = false;
+        $response['message'] ="Invalid Referred By";
+        print_r(json_encode($response));
+        return false;
+    }
+}
 $sql = "SELECT * FROM users WHERE mobile='$mobile'";
 $db->sql($sql);
 $res = $db->getResult();
